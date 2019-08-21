@@ -3,7 +3,6 @@ package c2.myapplication;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
@@ -20,9 +19,9 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.net.UnknownHostException;
 
 public class SocketClient extends Activity {
+
     public EditText inputText;
     public TextView responseMsg, serverState;
     public String IP;
@@ -235,6 +234,7 @@ public class SocketClient extends Activity {
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         try{
             bw = new BufferedWriter( new OutputStreamWriter(socket_client.getOutputStream()));
             // 寫入訊息
@@ -246,6 +246,6 @@ public class SocketClient extends Activity {
             socket_client.close();
         }
         catch (Exception e){}
-        super.onDestroy();
     }
+
 }

@@ -3,6 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/serverState"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp" />
+
     <EditText
         android:id="@+id/inputText"
         android:layout_width="match_parent"
@@ -28,12 +34,6 @@
             android:layout_height="wrap_content"
             android:text="Send" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/serverState"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="24sp" />
 
     <TextView
         android:id="@+id/responseMsg"

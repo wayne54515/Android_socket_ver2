@@ -2,7 +2,6 @@ package c2.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -11,24 +10,23 @@ import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.PrintStream;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
+import java.net.SocketException;
+import java.util.Enumeration;
 
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
+
     public Thread thread;
     public BufferedReader br;
     public BufferedWriter bw;
     public Handler handler, handler2;
-    public TextView info, msg, clientinfo;
+    public TextView info, msg, clientinfo, ipInfo;
     public String message = "";
     public ServerSocket serverSocket;
     public Socket s;
@@ -41,9 +39,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         info = (TextView) findViewById(R.id.portInfo);
+        ipInfo = (TextView) findViewById(R.id.ipInfo);
         msg = (TextView) findViewById(R.id.msg);
         clientinfo = (TextView)findViewById(R.id.clientinfo);
 
+        ipInfo.setText(getIpAddress());
         clientinfo.setText("Client State : False");
 
         startThread();
@@ -251,6 +251,7 @@ public class MainActivity extends Activity {
 
             }
 
+
 //            MainActivity.this.runOnUiThread(new Runnable() {
 //
 //                @Override
@@ -259,7 +260,37 @@ public class MainActivity extends Activity {
 //                }
 //            });
         }
+    }
 
+    private String getIpAddress() {
+        String ip = "";
+        try {
+            Enumeration<NetworkInterface> enumNetworkInterfaces = NetworkInterface
+                    .getNetworkInterfaces();
+            while (enumNetworkInterfaces.hasMoreElements()) {
+                NetworkInterface networkInterface = enumNetworkInterfaces
+                        .nextElement();
+                Enumeration<InetAddress> enumInetAddress = networkInterface
+                        .getInetAddresses();
+                while (enumInetAddress.hasMoreElements()) {
+                    InetAddress inetAddress = enumInetAddress.nextElement();
+
+                    if (inetAddress.isSiteLocalAddress()) {
+                        ip += "SiteLocalAddress: "
+                                + inetAddress.getHostAddress() + "\n";
+                    }
+
+                }
+
+            }
+
+        } catch (SocketException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            ip += "Something Wrong! " + e.toString() + "\n";
+        }
+
+        return ip;
     }
 
     @Override
@@ -272,4 +303,5 @@ public class MainActivity extends Activity {
             bw.flush();
         }catch (Exception e){}
     }
+
 }
